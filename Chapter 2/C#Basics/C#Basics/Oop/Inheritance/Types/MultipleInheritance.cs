@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace C_Basics.Oop.Inheritance.Types.Multiple
+﻿namespace C_Basics.Oop.Inheritance.Types.Multiple
 {
     public interface IAnimal
     {
@@ -23,4 +17,13 @@ namespace C_Basics.Oop.Inheritance.Types.Multiple
         public void Play() { Console.WriteLine("Playing..."); }
     }
 
+    public class TestMultipleInheritance
+    {
+        public static void GetCallInheritance()
+        {
+            Dog dog = new Dog();
+            dog.Eat();
+            dog.Play();
+        }
+    }
 }

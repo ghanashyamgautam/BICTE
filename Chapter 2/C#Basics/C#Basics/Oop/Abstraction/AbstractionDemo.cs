@@ -1,50 +1,64 @@
 ﻿
-namespace C_Basics.Oop.Abstraction
+abstract class Shape
 {
-    public abstract class Animal
+    public abstract double Area();
+    public abstract double Perimeter();
+}
+
+class Circle : Shape
+{
+    private double radius;
+
+    public Circle(double radius)
     {
-        public string Name { get; set; }
-
-        // Abstract method to be implemented by derived classes
-        public abstract void MakeSound();
-
-        // Regular method with implementation
-        public void DisplayInfo()
-        {
-            Console.WriteLine($"Animal: {Name}");
-        }
+        this.radius = radius;
     }
 
-    public class Dog : Animal
+    public override double Area()
     {
-        // Implementing the abstract method
-        public override void MakeSound()
-        {
-            Console.WriteLine("Dog barks: Woof! Woof!");
-        }
+        return Math.PI * radius * radius;
     }
 
-    public class Cat : Animal
+    public override double Perimeter()
     {
-        // Implementing the abstract method
-        public override void MakeSound()
-        {
-            Console.WriteLine("Cat meows: Meow! Meow!");
-        }
+        return 2 * Math.PI * radius;
+    }
+}
+
+class Rectangle : Shape
+{
+    private double length;
+    private double width;
+
+    public Rectangle(double length, double width)
+    {
+        this.length = length;
+        this.width = width;
     }
 
-
-    public class AbstractionDemo
+    public override double Area()
     {
-        Animal dog = new C_Basics.Oop.Abstraction.Dog { Name = "Buddy" };
-        Animal cat = new C_Basics.Oop.Abstraction.Cat { Name = "Whiskers" };
+        return length * width;
+    }
 
+    public override double Perimeter()
+    {
+        return 2 * (length + width);
+    }
+}
 
+class TestAbstraction
+{
+    
+    public static void RunShapesExample()
+    {
+        Shape circle = new Circle(5);
+        Shape rectangle = new Rectangle(4, 6);
 
-        //dog.DisplayInfo();
-        //    dog.MakeSound();
+        Console.WriteLine("Circle Area: " + circle.Area()); // Output: Circle Area: 78.53981633974483
+        Console.WriteLine("Circle Perimeter: " + circle.Perimeter()); // Output: Circle Perimeter: 31.41592653589793
 
-        //    cat.DisplayInfo();
-        //    cat.MakeSound();
+        Console.WriteLine("Rectangle Area: " + rectangle.Area()); // Output: Rectangle Area: 24
+        Console.WriteLine("Rectangle Perimeter: " + rectangle.Perimeter()); // Output: Rectangle Perimeter: 20
     }
 }
