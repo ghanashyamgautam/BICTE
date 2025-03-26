@@ -65,7 +65,7 @@ namespace LearnADODotnet.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, [Bind] Employee employee)
         {
-            if (id != employee.ID)
+            if (id != employee.EmployeeId)
             {
                 return NotFound();
             }

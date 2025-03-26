@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Dapper;       
 using Microsoft.Data.SqlClient;
 
 
@@ -21,7 +22,7 @@ namespace LearnADODotnet.Models
         {
             List<Employee> lstemployee = new List<Employee>();
 
-            using (SqlConnection con = new SqlConnection(connectionString))
+            /*using (SqlConnection con = new SqlConnection(connectionString))
             {
                 SqlCommand cmd = new SqlCommand("spGetAllEmployees", con);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -33,7 +34,7 @@ namespace LearnADODotnet.Models
                 {
                     Employee employee = new Employee();
 
-                    employee.ID = Convert.ToInt32(rdr["EmployeeID"]);
+                    employee.EmployeeId = Convert.ToInt32(rdr["EmployeeID"]);
                     employee.Name = rdr["Name"].ToString();
                     employee.Gender = rdr["Gender"].ToString();
                     employee.Department = rdr["Department"].ToString();
@@ -44,6 +45,14 @@ namespace LearnADODotnet.Models
                 con.Close();
             }
             return lstemployee;
+           
+            */
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                return con.Query<Employee>("spGetAllEmployees", commandType: CommandType.StoredProcedure).ToList();
+            }
+           
         }
 
         //To Add new employee record    
@@ -63,7 +72,16 @@ namespace LearnADODotnet.Models
                 cmd.ExecuteNonQuery();
                 con.Close();
             }
+            /*
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                var parameters = new { Name = employee.Name, Gender = employee.Gender, Department = employee.Department, City = employee.City };
+                con.Execute("spAddEmployee", parameters, commandType: CommandType.StoredProcedure);
+            }
+            */
         }
+        
 
         //To Update the records of a particluar employee  
         public void UpdateEmployee(Employee employee)
@@ -73,7 +91,7 @@ namespace LearnADODotnet.Models
                 SqlCommand cmd = new SqlCommand("spUpdateEmployee", con);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@EmpId", employee.ID);
+                cmd.Parameters.AddWithValue("@EmpId", employee.EmployeeId);
                 cmd.Parameters.AddWithValue("@Name", employee.Name);
                 cmd.Parameters.AddWithValue("@Gender", employee.Gender);
                 cmd.Parameters.AddWithValue("@Department", employee.Department);
@@ -83,6 +101,15 @@ namespace LearnADODotnet.Models
                 cmd.ExecuteNonQuery();
                 con.Close();
             }
+            
+            /*
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                var parameters = new { EmpId = employee.EmployeeId, Name = employee.Name, Gender = employee.Gender, Department = employee.Department, City = employee.City };
+                con.Execute("spUpdateEmployee", parameters, commandType: CommandType.StoredProcedure);
+            }
+            */
         }
 
         //Get the details of a particular employee  
@@ -100,7 +127,7 @@ namespace LearnADODotnet.Models
 
                 while (rdr.Read())
                 {
-                    employee.ID = Convert.ToInt32(rdr["EmployeeID"]);
+                    employee.EmployeeId = Convert.ToInt32(rdr["EmployeeID"]);
                     employee.Name = rdr["Name"].ToString();
                     employee.Gender = rdr["Gender"].ToString();
                     employee.Department = rdr["Department"].ToString();
@@ -108,6 +135,14 @@ namespace LearnADODotnet.Models
                 }
             }
             return employee;
+            
+            /*
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                return con.QueryFirstOrDefault<Employee>("SELECT * FROM tblEmployee WHERE EmployeeID = @Id", new { Id = id });
+            }
+            */
         }
 
         //To Delete the record on a particular employee  
@@ -125,6 +160,13 @@ namespace LearnADODotnet.Models
                 cmd.ExecuteNonQuery();
                 con.Close();
             }
+            /*
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Execute("spDeleteEmployee", new { EmpId = id }, commandType: CommandType.StoredProcedure);
+            }
+            */
         }
 
         public int GetTotalEmployee()
@@ -137,6 +179,13 @@ namespace LearnADODotnet.Models
                 con.Open();
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }
+            
+
+            /*using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                return con.ExecuteScalar<int>("SELECT COUNT(*) FROM tblEmployee");
+            }
+            */
         }
     
     }
