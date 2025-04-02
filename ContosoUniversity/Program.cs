@@ -10,10 +10,7 @@ namespace ContosoUniversity
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Register the DbContext
-            builder.Services.AddDbContext<SchoolContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+           
             // Add services to the container
             builder.Services.AddControllersWithViews();
 
@@ -21,12 +18,25 @@ namespace ContosoUniversity
             var app = builder.Build();
 
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment())
             {
+                // Use connection string from appsettings.Development.json
+                // Register the DbContext
+                builder.Services.AddDbContext<SchoolContext>(options =>
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            }
+            else
+            {
+                // Use connection string from appsettings.json (Production/Staging)
+                // Register the DbContext
+                builder.Services.AddDbContext<SchoolContext>(options =>
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+
             }
 
             app.UseHttpsRedirection();
